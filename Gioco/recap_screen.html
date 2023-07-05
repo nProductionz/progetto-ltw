@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>recap_screen</title>
+
+    <!-- sto dioporco non funziona -->
+    <script type="text/javascript">
+        function disableBack() {
+            window.history.forward();
+        }
+        setTimeout("disableBack()", 0);
+        window.onunload = function () {
+            null
+        };
+    </script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="recap-style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  
+  
+
+</head>
+
+<body onload="culo()" >
+    <div class="screen">
+        <div class="info">
+          
+         <!---  <button onclick="global_culo()" class="button">culo</button> -->
+        </div>
+        <div class="classifica">
+            
+            <div class="button-box">
+            <div id="btn"></div>
+            <button type="button" class="button" id="recap-btn" onclick="global()">recap </button>
+            <button type="button" class="button" id="global-btn" onclick="recap()">global</button>
+            </div>
+           
+            <table class="table table-striped table-dark" id='your-points'>
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Punteggio</th>
+                    <th scope="col">Data</th>
+                    <th scope="col">Ora</th>
+                </tr>
+                </thead>
+                <tbody id="your-points-body"></tbody>
+            </table>
+            <table class="table table-striped table-dark" id='global'>
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Punteggio</th>
+                    <th scope="col">giocatore</th>
+                </tr>
+            </thead>
+            <tbody id="global-body"></tbody>
+            </table>
+        </div>
+       
+            
+        
+        <div class="wrap">
+            <button class="button" onclick='location.href="gioco.html"'>Play Again</button>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script>
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i];
+                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+
+        function culo() {
+            var utente = readCookie('Account');
+
+            $.get("ranking.php?utente=" + utente).then(function (data, status) {
+
+
+                if (status === "success") {
+
+                    var obj = JSON.parse(data);
+
+                    for (var i = 0; i < obj.punteggio.length; i++) {
+
+                        var elem = document.createElement('tr');
+
+                        $("#your-points-body").append(elem);
+
+                        var punteggio = obj.punteggio[i];
+                        var data = obj.data[i];
+                        var ora = obj.ora[i];
+
+                        var tag4=document.createElement('th')
+                        tag4.innerHTML= i+1  
+                        tag4.scope="row";   
+
+                        var tag1 = document.createElement('td');
+                        tag1.innerHTML = punteggio;
+                        var tag2 = document.createElement('td');
+                        tag2.innerHTML = data;
+                        var tag3 = document.createElement('td');
+                        tag3.innerHTML = ora;
+
+                        elem.append(tag4)
+                        elem.append(tag1);
+                        elem.append(tag2);
+                        elem.append(tag3);
+
+                    }
+                }
+            }).fail(console.log("errore recap account"))
+
+            $.get("global_ranking.php").then(function (data, status) {
+                if (status === "success") {
+                    var obj = JSON.parse(data);
+                    for (var i = 0; i < obj.punteggio.length; i++) {
+
+                        var elem = document.createElement('tr');
+
+                        $("#global-body").append(elem);
+
+                        var punteggio = obj.punteggio[i];
+                        var giocatore = obj.giocatore[i];
+                        
+                        var tag3=document.createElement('th')
+                        tag3.innerHTML= i+1  
+                        tag3.scope="row";                         
+
+                        var tag1 = document.createElement('td');
+                        tag1.innerHTML = punteggio;
+
+                        var tag2 = document.createElement('td');
+                        tag2.innerHTML = giocatore;
+
+                        elem.append(tag3)
+                        elem.append(tag1);
+                        elem.append(tag2);
+
+
+                    }
+
+                }
+
+            }).fail(console.log("errore global-ranking"))
+        }
+
+        
+        var yp = document.getElementById("your-points");
+        var glob = document.getElementById("global");
+        var btn = document.getElementById("btn");
+
+        function recap() {
+            yp.style.left = "-755px";
+            glob.style.left = "5px";
+            btn.style.left = "110px";
+        }
+
+        function global() {
+            yp.style.left = "5px";
+            glob.style.left = "760px";
+            btn.style.left = "0";
+        }
+    </script>
+</body>
+
+</html>

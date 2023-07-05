@@ -1,0 +1,276 @@
+:root {
+   --pixel-size: 2px; /* ogni pixel sullo screen*/
+   --grid-cell: calc( var(--pixel-size) * 16); /* le celle sullo schermo*/
+   --bg: #9fa7e4;
+}
+@media( min-width: 700px ) {
+   :root {
+      --pixel-size: 3px;
+   }
+}
+@media( min-width: 1000px ) {
+   :root {
+      --pixel-size: 4px;
+   }
+}
+/* @media( min-width: 1000px ) {
+   :root {
+      --pixel-size: 5px;
+   }
+} */
+
+
+/* ---------------------------------------------- SCREEN & GENERAL SETTINGS ------------------------------------------------- */
+
+html, body {
+   height: 100%;
+
+}
+
+body {
+   background: url("../img/sfondo_gioco.jpg");
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+.pixel-art {
+   image-rendering: pixelated; /* scala l'immagine */
+}
+
+.frame {
+  
+   width: calc(var(--pixel-size) * 250);
+   height: calc(var(--pixel-size) * 208);
+   outline: var(--pixel-size) solid #fff;
+   z-index:1; 
+   position:relative;
+}
+
+.camera {
+   width: calc(var(--pixel-size) * 250);
+   height: calc(var(--pixel-size) * 208);
+   overflow: hidden;
+   background:black;
+   position:relative;
+   background-image: none;
+}
+
+.map {
+   image-rendering: pixelated;
+   background-image: url("../img/map_tile.png");
+   background-size: 100%;
+   width: calc(21 * var(--grid-cell));
+   height: calc(13 * var(--grid-cell));
+   position: relative;
+   
+}
+
+.character {
+   width: calc( var(--grid-cell)* 2 );
+   height: calc( var(--grid-cell)* 2 );
+   position: absolute;
+   overflow:hidden;
+   
+}
+
+.shadow {
+   width: calc( var(--grid-cell)* 2 );
+   height: calc( var(--grid-cell)* 2 );
+   position: absolute;
+   left:0;
+   top:0;
+   background: url("https://assets.codepen.io/21542/DemoRpgCharacterShadow.png") no-repeat no-repeat;
+   background-size: 100%;
+}
+
+.character_spritesheet {
+   position: absolute;
+   background: url("../img/prova_sprite.png") no-repeat no-repeat;
+   background-size: 100%;
+   width: calc( var(--grid-cell)* 8 );
+   height: calc( var(--grid-cell)* 8 );
+}
+
+.enemy_spritesheet {
+   position: absolute;
+   background: url("../img/enemy_imp.png");
+   background-size: 100%;
+   width: calc( var(--grid-cell)* 8 );
+   height: calc( var(--grid-cell)* 8 );  
+}
+.enemy_hit_spritesheet {
+   position: absolute;
+   background: url("../img/enemy_imp_hit.png");
+   background-size: 100%;
+   width: calc( var(--grid-cell)* 8 );
+   height: calc( var(--grid-cell)* 8 );  
+}
+
+.enemy_death_spritesheet {
+   position: absolute;
+   background: url("../img/death_imp.png");
+   background-size: 100%;
+   width: calc( var(--grid-cell)* 8 );
+   height: calc( var(--grid-cell)* 8 ); 
+}
+
+.bullet {
+   position: absolute;
+   background-image: url("../img/bullet.png");
+   background-size: 100%;
+   width: calc( var(--grid-cell)* 8 );
+   height: calc( var(--grid-cell)* 8 );
+}
+
+.points {
+  font-family: Chalkduster, fantasy;
+  color: whitesmoke;
+  text-shadow: 1px 1px red;
+   position: relative;
+   
+}
+.counter-display {
+   font-family: Chalkduster, fantasy;
+  color: whitesmoke;
+  text-shadow: 1px 1px red;
+  position: relative;
+  left: 60px;
+  top: -18px;
+}
+
+
+.hud{
+   position: absolute;
+   z-index: 1;
+   left: 820px;
+   top: 15px;
+   
+}
+.death-screen{
+   z-index: -1;
+  
+}
+
+/* ---------------------------------------------- HEALT BAR ------------------------------------------------- */
+ 
+progress[value]{
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: maroon;
+  border-radius: 2px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25) inset;
+  
+}
+
+
+
+
+progress[value]::-webkit-progress-value {
+  background-image:
+      -webkit-linear-gradient(-45deg, 
+                              transparent 33%, rgba(0, 0, 0, .1) 33%, 
+                              rgba(0,0, 0, .1) 66%, transparent 66%),
+      -webkit-linear-gradient(top, 
+                              rgba(255, 255, 255, .25), 
+                              rgba(0, 0, 0, .25)),
+      -webkit-linear-gradient(left, #09c, #f44);
+
+    border-radius: 2px; 
+    background-size: 35px 20px, 100% 100%, 100% 100%;
+    
+}
+
+
+/* ---------------------------------------------- CHARACTER SPRITE MANAGER ------------------------------------------------- */
+
+
+
+.character[facing="right"] .character_spritesheet {
+   background-position-y: calc( var(--pixel-size) * -32 );
+}
+.character[facing="up"] .character_spritesheet {
+   background-position-y: calc( var(--pixel-size) * -64 );
+}
+.character[facing="left"] .character_spritesheet {
+   background-position-y: calc( var(--pixel-size) * -96 );
+}
+.character[walking="true"] .character_spritesheet {
+   animation: walkAnimation 0.6s steps(4) infinite; 
+}
+
+@keyframes walkAnimation {
+  from {
+    transform: translate3d(0%,0%,0);
+  }
+  to {
+    transform: translate3d(-100%,0%,0);
+  }
+}
+
+/* ---------------------------------------------- ENEMY SPRITEM MANAGER ------------------------------------------------- */
+
+.enemy{
+  width: calc( var(--grid-cell)* 2 );
+  height: calc( var(--grid-cell)* 2 );
+  position: absolute;
+  overflow:hidden;
+}
+.enemy[facing="right"] .enemy_spritesheet {
+  background-position-y: calc( var(--pixel-size) * -32 );
+}
+.enemy[facing="up"] .enemy_spritesheet {
+  background-position-y: calc( var(--pixel-size) * -64 );
+}
+.enemy[facing="left"] .enemy_spritesheet {
+  background-position-y: calc( var(--pixel-size) * -96 );
+}
+.enemy[walking="true"] .enemy_spritesheet {
+  animation: walkAnimation 0.6s steps(4) infinite; 
+}
+
+.enemy[facing="right"] .enemy_hit_spritesheet {
+   background-position-y: calc( var(--pixel-size) * -32 );
+ }
+ .enemy[facing="up"] .enemy_hit_spritesheet {
+   background-position-y: calc( var(--pixel-size) * -64 );
+ }
+ .enemy[facing="left"] .enemy_hit_spritesheet {
+   background-position-y: calc( var(--pixel-size) * -96 );
+ }
+ .enemy[walking="true"] .enemy_hit_spritesheet {
+   animation: walkAnimation 0.6s steps(4) infinite; 
+ }
+
+
+
+/* ---------------------------------------------- MAP MANAGER ------------------------------------------------- */
+
+
+.corner_topleft,
+.corner_topright,
+.corner_bottomleft,
+.corner_bottomright {
+   position: absolute;
+   width: var(--pixel-size);
+   height: var(--pixel-size);
+   background: var(--bg);
+   z-index:2;
+}
+
+.corner_topleft {
+   top: calc(var(--pixel-size) * -1);
+   left: calc(var(--pixel-size) * -1);
+}
+.corner_topright {
+   top: calc(var(--pixel-size) * -1);
+   right: calc(var(--pixel-size) * -1);
+}
+.corner_bottomleft {
+   bottom: calc(var(--pixel-size) * -1);
+   left: calc(var(--pixel-size) * -1);
+}
+.corner_bottomright {
+   bottom: calc(var(--pixel-size) * -1);
+   right: calc(var(--pixel-size) * -1);
+}

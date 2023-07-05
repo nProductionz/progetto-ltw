@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="stylesheet" href="gioco-style.css">
+  <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+</head>
+
+<body>
+
+
+
+  <div class="frame" id="frame">
+
+
+
+    <div class="hud" id="hud"> <progress id="health" value="100" max="100"></progress>
+      <div class="points">Points: <div class="counter-display">0</div>
+    </div>
+
+    </div>
+
+
+    <div class="corner_topleft"></div>
+    <div class="corner_topright"></div>
+    <div class="corner_bottomleft"></div>
+    <div class="corner_bottomright"></div>
+
+
+    <div class="camera" id="camera">
+
+      <div class="map pixel-art" id="map">
+
+
+        <audio volume="0.5" autoplay>
+          <source src="audio/bgm/the_only_thing_they_fear_is_you.mp3"  type="audio/mpeg">
+        </audio>
+        <div class="character" facing="down" walking="true">
+
+          <div class="shadow pixel-art"></div>
+          <div class="character_spritesheet pixel-art"></div>
+
+        </div>
+      </div>
+
+    </div>
+
+
+
+    
+
+  </div>
+ 
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="./gioco-controlli.js"></script>
+
+</body>
+
+</html>
